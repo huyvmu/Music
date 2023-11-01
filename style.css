@@ -31,6 +31,7 @@ body{
 
 .wrapper{
     width: 380px;
+    overflow: hidden;
     position: relative;
     border-radius: 15px;
     padding: 25px 30px;
@@ -193,12 +194,22 @@ body{
 .music-list{
     position: absolute;
     left: 0;
-    bottom:0;
+    bottom: -55%;
+    opacity: 0;
+    pointer-events: none;
     width: 100%;
-    padding: 15px;
+    padding: 15px 30px;
     border-radius: 15px;
     background: var(--white);
     box-shadow: 0px -5px 10px rgba(0,0,0,0.1);
+    transition: all 0.14s ease-out;
+}
+
+/* Use show class in js */
+.music-list.show{
+    bottom: 0;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .music-list .header .row{
@@ -221,9 +232,14 @@ body{
     color: var(--lightblack);
 }
 
+.music-list ul::-webkit-scrollbar{
+    width: 0;
+}
+
 .music-list ul{
     margin: 10px 0;
     max-height: 260px;
+    overflow-y: auto;
 }
 
 .music-list ul li{
