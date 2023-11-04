@@ -8,7 +8,8 @@ mainAudio = wrapper.querySelector("#main-audio"),
 playPauseBtn = wrapper.querySelector(".play-pause"),
 prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
-progressBar = wrapper.querySelector(".progress-bar")
+progressArea = wrapper.querySelector(".progress-area"),
+progressBar = wrapper.querySelector(".progress-bar");
 
 
 let musicIndex = 1;
@@ -106,4 +107,33 @@ mainAudio.addEventListener("timeupdate", (e) =>{
         currentSec = `0${currentSec}`;
     }
     musicCurrentTime.innerText = `${currentMin}:${currentSec}`;
+});
+
+//update playing song current time arcording to the progress bar width
+progressArea.addEventListener("click", (e) => {
+    let progressWidthval = progressArea.clientWidth; // getting width of progress bar
+    let clickedOffSetX = e.offsetX; // getting offset x value
+    let songDuration = mainAudio.duration; // getting song total duration
+
+    mainAudio.currentTime = (clickedOffSetX / progressWidthval) * songDuration;
+    playMusic();
+});
+
+// work on repeat and suffle song according to the icon
+const repeatBtn = wrapper.querySelector("#repeat-plist");
+repeatBtn.addEventListener("click", () => {
+    // first ger the innerText of the icon then we'll change accordingly
+    let getText = repeatBtn.innerText;
+    // let's do different changes on different icon click using switch
+    switch(getText){
+        case "repeat": // if this icon is repeat
+            repeatBtn.innerText = "repeat_one";
+            break;
+        case "repeat_one": // if this icon is repeat_one then change it to shuffle  
+            repeatBtn.innerText = "shuffle";
+            break;
+        case "shuffle": // if this icon is shuffle then change it to repeat  
+            repeatBtn.innerText = "repeat";
+            break;
+    }
 });
