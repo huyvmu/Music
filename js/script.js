@@ -12,8 +12,7 @@ progressArea = wrapper.querySelector(".progress-area"),
 progressBar = wrapper.querySelector(".progress-bar"),
 musicList = wrapper.querySelector("#close");
 showMoreBtn = musicList.querySelector("#more-music"),
-hideMusicBtn = musicList.querySelector("#close"),
-
+hideMusicBtn = musicList.querySelector("#close");
 let musicIndex = 1;
 
 window.addEventListener("load", () =>{
