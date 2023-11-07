@@ -10,10 +10,11 @@ prevBtn = wrapper.querySelector("#prev"),
 nextBtn = wrapper.querySelector("#next"),
 progressArea = wrapper.querySelector(".progress-area"),
 progressBar = wrapper.querySelector(".progress-bar"),
-musicList = wrapper.querySelector("#close");
-showMoreBtn = musicList.querySelector("#more-music"),
+musicList = wrapper.querySelector(".music-list");
+showMoreBtn = wrapper.querySelector("#more-music"),
 hideMusicBtn = musicList.querySelector("#close");
 let musicIndex = 1;
+
 
 window.addEventListener("load", () =>{
     loadMusic(musicIndex); // calling load music once window loaded
@@ -171,3 +172,26 @@ mainAudio.addEventListener("ended", () => {
             break;
     }
 });
+
+showMoreBtn.addEventListener("click", () =>{
+    musicList.classList.toggle("show")
+});
+
+hideMusicBtn.addEventListener("click", () =>{
+    showMoreBtn.click()
+});
+
+const ulTag = wrapper.querySelector("ul");
+
+// create li according to the array length
+for (let i = 0; i < allMusic.length; i++){
+    let liTag = ` <li>
+                    <div class="row">
+                        <span>Em Của Ngày Hôm Qua</span>
+                        <p>Audio Library</p>
+                    </div>
+                    <soan class="audio-duration">3:40</soan>
+                </li>`;
+    ulTag.insertAdjacentElement("beforeend")
+    
+}
