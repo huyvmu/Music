@@ -13,6 +13,7 @@
 }
 
 :root{
+    --cus:#e0bea2ce;
     --pink: #ff74a4;
     --violet: #9f6ea3;
     --lightblack: #515C6F;
@@ -35,7 +36,7 @@ body{
     position: relative;
     border-radius: 15px;
     padding: 25px 30px;
-    background: var(--white);
+    background: var(--cus);
     box-shadow: 0px 6px 15px var(--lightbshadow);
 }
 
