@@ -13,11 +13,13 @@ progressBar = wrapper.querySelector(".progress-bar"),
 musicList = wrapper.querySelector(".music-list");
 showMoreBtn = wrapper.querySelector("#more-music"),
 hideMusicBtn = musicList.querySelector("#close");
-let musicIndex = 1;
 
+//load random music on page refresh
+let musicIndex = Math.floor((Math.random() * allMusic.length) + 1);
 
 window.addEventListener("load", () =>{
     loadMusic(musicIndex); // calling load music once window loaded
+    playingNow();
 })
 
 // load music function
@@ -50,6 +52,8 @@ function nextMusic(){
     musicIndex > allMusic.length ? musicIndex = 1 : musicIndex = musicIndex;
     loadMusic(musicIndex);
     playMusic();
+    playingNow();
+
 }
 
 // prev music function
@@ -60,6 +64,8 @@ function prevMusic(){
     musicIndex < 1 ? musicIndex = musicIndex.length : musicIndex = musicIndex;
     loadMusic(musicIndex);
     playMusic();
+    playingNow();
+
 }
 
 // play or music button event
@@ -67,6 +73,7 @@ playPauseBtn.addEventListener("click", ()=>{
     const isMusicPaused = wrapper.classList.contains("paused");
     // if isMusicPaused is true then call pauseMusic else call playMusic
     isMusicPaused ? pauseMusic() : playMusic();
+    playingNow();
 });
 
 // next music btn event
@@ -169,6 +176,7 @@ mainAudio.addEventListener("ended", () => {
             musicIndex = randIndex; // passing randomIndex to musicIndex so the random song will play
             loadMusic(musicIndex); // calling loadMusic function
             playMusic(); //call playMusic function
+            playingNow();
             break;
     }
 });
@@ -185,13 +193,63 @@ const ulTag = wrapper.querySelector("ul");
 
 // create li according to the array length
 for (let i = 0; i < allMusic.length; i++){
-    let liTag = ` <li>
+    //pass the song name, artist from the array to li
+    let liTag = ` <li li-index="${i + 1}">
                     <div class="row">
-                        <span>Em Của Ngày Hôm Qua</span>
-                        <p>Audio Library</p>
+                        <span>${allMusic[i].name}</span>
+                        <p>${allMusic[i].artist}</p>
                     </div>
-                    <soan class="audio-duration">3:40</soan>
+                    <audio class="${allMusic[i].src}" src="songs/${allMusic[i].src}.mp3"></audio>
+                    <span id="${allMusic[i].src}" class="audio-duration">3:40</span>
                 </li>`;
-    ulTag.insertAdjacentElement("beforeend")
+    ulTag.insertAdjacentHTML("beforeend", liTag)
     
+    let liAudioTagDuration = ulTag.querySelector(`#${allMusic[i].src}`);
+    let liAudioTag = ulTag.querySelector(`.${allMusic[i].src}`);
+
+    liAudioTag.addEventListener("loadeddata", () =>{
+        let audioDuration = liAudioTag.duration;
+        let totalMin = Math.floor(audioDuration / 60);
+        let totalSec = Math.floor(audioDuration % 60);
+        if (totalSec < 10){ // adding 0 if sec < 10
+            totalSec = `0${totalSec}`;
+        }
+        liAudioTagDuration.innerText = `${totalMin}:${totalSec}`;
+        // adding t-duration which we'll use below
+        liAudioTagDuration.setAttribute("t-duration", `${totalMin}:${totalSec}`);
+    });
+}
+
+// work on play particular song on click
+const allLiTags = ulTag.querySelectorAll("li");
+function playingNow(){
+    for (let j = 0; j < allLiTags.length; j++){
+        let audioTag = allLiTags[j].querySelector(".audio-duration");
+        // remove playing class from all other li except the last one which is clicked
+        if (allLiTags[j].classList.contains("playing")){
+            allLiTags[j].classList.remove("playing");
+            // get that audio duration value and pass .daudio-duration innerText
+            let adDuration = audioTag.getAttribute("t-duration");
+            audioTag.innerText = adDuration; // passing t-duration value to audio duration innerText
+
+        }
+        // if there is a li tag which li-index is equal to musicIndex
+        // then this music is playing now and we'll style it
+        if (allLiTags[j].getAttribute("li-index") == musicIndex){
+            allLiTags[j].classList.add("playing");
+            audioTag.innerText = "Playing";
+        }
+    
+        // adding attribute onclick
+        allLiTags[j].setAttribute("onclick", "clicked(this)");
+    }
+}
+
+// play song on li click
+function clicked(elements){
+    let getLiIndex = elements.getAttribute("li-index");
+    musicIndex = getLiIndex; // passing that li-index to musicIndex
+    loadMusic(musicIndex);
+    playMusic();
+    playingNow();
 }
